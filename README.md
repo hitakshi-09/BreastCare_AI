@@ -55,21 +55,21 @@ This intelligent assistant helps support early diagnosis through advanced ML mod
 
 1. **Clone the repository**
 
-      git clone https://github.com/yourusername/breast-cancer-prediction-app.git
-      
-      cd breast-cancer-prediction-app
+            git clone https://github.com/yourusername/breast-cancer-prediction-app.git
+            
+            cd breast-cancer-prediction-app
 
    
 3. **Install the dependencies**
 
-      pip install -r requirements.txt
+            pip install -r requirements.txt
 
 
 4. **Run the app**
 
-      python app.py
+            python app.py
 
 
 5. **Visit in Browser**
 
-      http://127.0.0.1:5000
+            http://127.0.0.1:5000
