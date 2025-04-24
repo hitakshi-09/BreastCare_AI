@@ -3,7 +3,7 @@ import joblib
 import numpy as np
 import pandas as pd
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="docs", static_folder="static")
 
 # Load model and scaler
 model = joblib.load('model/model.pkl')
