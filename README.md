@@ -56,6 +56,7 @@ This intelligent assistant helps support early diagnosis through advanced ML mod
 1. **Clone the repository**
 
 git clone https://github.com/yourusername/breast-cancer-prediction-app.git
+
 cd breast-cancer-prediction-app
 
 2. **Install the dependencies**
