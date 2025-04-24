@@ -150,8 +150,8 @@
             type="text"
             name="{{ field }}"
             placeholder="{{ field.replace('_', ' ') | title }}"
-            value="{{ field_values[field] if field_values and field in field_values else '' }}"
             required
+            value="{{ input_data[field] if input_data and field in input_data else '' }}"
           />
           {% endfor %}
         </div>
@@ -201,6 +201,7 @@
             size: 16
           };
         
+          // Prediction confidence pie chart
           const predictionCtx = document.getElementById('predictionChart').getContext('2d');
           new Chart(predictionCtx, {
             type: 'pie',
@@ -231,18 +232,15 @@
             }
           });
         
+          // Feature importance doughnut chart
           const customCtx = document.getElementById('customChart').getContext('2d');
           new Chart(customCtx, {
             type: 'doughnut',
             data: {
-              labels: [
-                'Worst Radius', 'Mean Radius', 'Worst Perimeter', 'Mean Perimeter',
-                'Worst Area', 'Mean Area', 'Worst Concave Points', 'Mean Concave Points',
-                'Worst Compactness', 'Mean Texture'
-              ],
+              labels: {{ feature_labels | tojson }},  // Dynamic feature labels
               datasets: [{
                 label: 'Feature Importance',
-                data: [15, 14, 13, 12, 10, 8, 7, 6, 3, 2],
+                data: {{ features | tojson }},  // Dynamic feature values
                 backgroundColor: [
                   '#4caf50', '#2196f3', '#ff9800', '#9c27b0',
                   '#e91e63', '#00bcd4', '#ffc107', '#8bc34a',
@@ -269,6 +267,7 @@
             }
           });
         </script>
+        
         
       {% endif %}
     
