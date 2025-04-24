@@ -25,7 +25,7 @@ def predict():
 
         result = "Malignant" if prediction == 0 else "Benign"
         labels = ['Malignant', 'Benign']
-
+ 
         feature_labels = [
             'Worst Radius', 'Mean Radius', 'Worst Perimeter', 'Mean Perimeter',
             'Worst Area', 'Mean Area', 'Worst Concave Points', 'Mean Concave Points',
