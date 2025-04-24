@@ -24,7 +24,7 @@ X_test_scaled = scaler.transform(X_test)
 
 # Train model
 model = SVC(probability=True)
-model.fit(X_train, y_train)
+model.fit(X_train_scaled, y_train)
 
 # Evaluate
 y_pred = model.predict(X_test_scaled)
