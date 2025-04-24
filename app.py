@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, send_file, request, render_template
 import joblib
 import numpy as np
 import pandas as pd
+import os
 
-app = Flask(__name__, template_folder="docs", static_folder="static")
+app = Flask(__name__)
 
 # Load model and scaler
 model = joblib.load('model/model.pkl')
@@ -11,8 +12,12 @@ scaler = joblib.load('model/scaler.pkl')
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return send_file('index.html')
  
+@app.route('/favicon.ico')
+def favicon():
+    return send_file(os.path.join('static', 'fevicon.png'))
+
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
