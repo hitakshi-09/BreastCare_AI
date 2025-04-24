@@ -17,6 +17,13 @@ This intelligent assistant helps support early diagnosis through advanced ML mod
 
 ---
 
+## 🚀 Live Demo
+
+🔗 **[Try the Live App Here](https://breastcare-ai.onrender.com)**  
+_Replace this with your actual deployment URL (e.g., from Render, Heroku, Vercel, or your server)._
+
+---
+
 ## 🖼 Screenshots
 
 ### 🏠 Homepage  
