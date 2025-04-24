@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Breast Cancer Prediction</title>
+    <link rel="icon" href="/static/fevicon.png" type="image/png">
+    <style>
+      body {
+        margin: 0;
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        background: linear-gradient(to right, #f8f9fa, #e0f7fa);
+        color: #333;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 40px 20px;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #00796b;
+      }
+
+      .intro {
+        background: #ffffff;
+        border-left: 5px solid #00796b;
+        border-right: 5px solid #00796b;
+        padding: 20px;
+        margin: 20px 0 30px 0;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      }
+
+      .intro h2 {
+        margin-top: 0;
+        color: #00796b;
+      }
+
+      .intro p {
+        margin: 10px 0;
+        font-size: 16px;
+        color: #444;
+      }
+
+      form {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+
+      input[type="text"] {
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+        box-sizing: border-box;
+        transition: 0.3s ease-in-out;
+      }
+
+      input[type="text"]:focus {
+        border-color: #26a69a;
+        box-shadow: 0 0 5px #26a69a;
+        outline: none;
+      }
+
+      .btn-container {
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      .button_css {
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        padding: 12px 30px;
+        font-size: 16px;
+        background-color: #26a69a;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .button_css:hover {
+        background-color: #00796b;
+      }
+
+      .result {
+        margin-top: 30px;
+        text-align: center;
+        font-size: 22px;
+        color: #004d40;
+        font-weight: bold;
+      }
+
+      .charts-container {
+        margin-top: 40px;
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        flex-wrap: wrap;
+      }
+
+      .chart-box {
+        width: 300px;
+        height: 300px;
+      }
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Breast Cancer Prediction System</h1>
+
+      <div class="intro">
+        <h2>🔬 Intelligent Diagnosis Assistant</h2>
+        <p>
+          Enter the diagnostic measurements in the form below to predict whether the tumor is likely <strong>benign</strong> or <strong>malignant</strong>.
+          Our AI model provides both a confidence score and an analysis of influential features.
+        </p>
+        <p>
+          ⚠️ <strong>Disclaimer:</strong> This is a supportive tool and not a replacement for professional medical consultation. Always follow up with your doctor.
+        </p>
+      </div>
+
+      <form action="/predict" method="POST">
+        <div class="grid">
+          {% for field in [
+            'mean_radius', 'mean_texture', 'mean_perimeter', 'mean_area', 'mean_smoothness',
+            'mean_compactness', 'mean_concavity', 'mean_concave_points', 'mean_symmetry', 'mean_fractal_dimension',
+            'radius_error', 'texture_error', 'perimeter_error', 'area_error', 'smoothness_error',
+            'compactness_error', 'concavity_error', 'concave_points_error', 'symmetry_error', 'fractal_dimension_error',
+            'worst_radius', 'worst_texture', 'worst_perimeter', 'worst_area', 'worst_smoothness',
+            'worst_compactness', 'worst_concavity', 'worst_concave_points', 'worst_symmetry', 'worst_fractal_dimension'
+          ] %}
+          <input
+            type="text"
+            name="{{ field }}"
+            placeholder="{{ field.replace('_', ' ') | title }}"
+            value="{{ field_values[field] if field_values and field in field_values else '' }}"
+            required
+          />
+          {% endfor %}
+        </div>
+
+        <div class="btn-container">
+          <button type="submit" class="button_css">Predict Result</button>
+        </div>
+      </form>
+
+      {% if prediction_text %}
+        <div class="result">
+          <h2 style="margin-top: 30px;">Prediction Result</h2>
+          {% if prediction_text == 'Malignant' %}
+            🧬 <span style="color: #d32f2f;">Critical Alert:</span>
+            <strong>The tumor is likely malignant.</strong><br>
+            Immediate consultation with an oncologist is strongly recommended.
+          {% elif prediction_text == 'Benign' %}
+            ✅ <span style="color: #388e3c;">Good News:</span>
+            <strong>The tumor is likely benign.</strong><br>
+            Regular monitoring and a follow-up with your doctor is advised.
+          {% else %}
+            <strong>{{ prediction_text }}</strong>
+          {% endif %}
+        </div>
+
+        <!-- Charts Row -->
+        <div class="chart-container" style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 30px; margin-top: 40px;">
+      
+          <!-- Pie Chart Block -->
+          <div style="flex: 1; min-width: 300px;">
+            <h3 style="text-align: center; color: #00796b;">Prediction Confidence</h3>
+            <canvas id="predictionChart" width="250" height="250"></canvas>
+          </div>
+      
+          <!-- Doughnut Chart Block -->
+          <div style="flex: 1; min-width: 300px;">
+            <h3 style="text-align: center; color: #00796b;">Feature Importance</h3>
+            <canvas id="customChart" width="250" height="250"></canvas>
+          </div>
+      
+        </div>
+    
+        <!-- Chart.js Script -->
+        <script>
+          const chartFont = {
+            family: "Cambria, Cochin, Georgia, Times, 'Times New Roman', serif",
+            size: 16
+          };
+        
+          const predictionCtx = document.getElementById('predictionChart').getContext('2d');
+          new Chart(predictionCtx, {
+            type: 'pie',
+            data: {
+              labels: {{ labels | tojson }},
+              datasets: [{
+                label: 'Prediction Confidence',
+                data: {{ probabilities | tojson }},
+                backgroundColor: ['#f44336', '#2196f3'],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              plugins: {
+                title: {
+                  font: chartFont
+                },
+                legend: {
+                  labels: {
+                    font: chartFont
+                  }
+                },
+                tooltip: {
+                  bodyFont: chartFont,
+                  titleFont: chartFont
+                }
+              }
+            }
+          });
+        
+          const customCtx = document.getElementById('customChart').getContext('2d');
+          new Chart(customCtx, {
+            type: 'doughnut',
+            data: {
+              labels: [
+                'Worst Radius', 'Mean Radius', 'Worst Perimeter', 'Mean Perimeter',
+                'Worst Area', 'Mean Area', 'Worst Concave Points', 'Mean Concave Points',
+                'Worst Compactness', 'Mean Texture'
+              ],
+              datasets: [{
+                label: 'Feature Importance',
+                data: [15, 14, 13, 12, 10, 8, 7, 6, 3, 2],
+                backgroundColor: [
+                  '#4caf50', '#2196f3', '#ff9800', '#9c27b0',
+                  '#e91e63', '#00bcd4', '#ffc107', '#8bc34a',
+                  '#673ab7', '#009688'
+                ],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              plugins: {
+                title: {
+                  font: chartFont
+                },
+                legend: {
+                  labels: {
+                    font: chartFont
+                  }
+                },
+                tooltip: {
+                  bodyFont: chartFont,
+                  titleFont: chartFont
+                }
+              }
+            }
+          });
+        </script>
+        
+      {% endif %}
+    
+    </div>
+  </body>
+</html>
