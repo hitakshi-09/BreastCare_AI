@@ -45,6 +45,11 @@ This intelligent assistant helps support early diagnosis through advanced ML mod
 ![SS3](https://github.com/user-attachments/assets/a3dfd05c-9643-405b-804e-5a40358cb9c2)
 
 ---
+### Power BI Dashboard
+
+![Screenshot 2025-04-25 161613](https://github.com/user-attachments/assets/86e01ea1-e6a4-4826-8c3e-a48646ab2879)
+
+---
 
 ## 🧰 Tech Stack
 
